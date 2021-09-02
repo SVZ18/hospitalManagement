@@ -2,12 +2,27 @@ package Objects;
 
 public class Drugs {
 
+    private int drugId;
     private String serialNum;
     private String name;
 
-    public Drugs(String serialNum, String name) {
+
+    public Drugs() {
+
+    }
+
+    public Drugs(int drugiId, String serialNum, String name) {
+        this.drugId = drugId;
         this.serialNum = serialNum;
         this.name = name;
+    }
+
+    public int getDrugId() {
+        return drugId;
+    }
+
+    public void setDrugId(int drugId) {
+        this.drugId = drugId;
     }
 
     public String getSerialNum() {
@@ -25,4 +40,5 @@ public class Drugs {
     public void setName(String name) {
         this.name = name;
     }
+
 }

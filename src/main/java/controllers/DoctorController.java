@@ -22,17 +22,17 @@ public class DoctorController {
         System.out.print("Enter the last name of the doctor: ");
         String lastName = scanner.next();
 
-        System.out.print("Enter the age of the doctor: ");
-        int age = scanner.nextInt();
-
         System.out.print("Enter the department: ");
         String department = scanner.next();
+
+        System.out.println("Enter the consultation times: ");
+        String consultations = scanner.next();
 
 
         try {
 
-            ps = DbConnector.getConnection().prepareStatement("INSERT INTO doctors(firstname, lastname, age, " +
-                    "department)" + " VALUES('" + firstName + "', '" + lastName + "', " + age + " , '" + department + "')");
+            ps = DbConnector.getConnection().prepareStatement("INSERT INTO doctors(firstname, lastname, " +
+                    "department, consultations)" + " VALUES('" + firstName + "', '" + lastName + "', '" + department + "', '" + consultations +"')");
 
             ps.execute();
             return true;
@@ -45,30 +45,30 @@ public class DoctorController {
     public static Doctor getDoctorById() {
 
         System.out.print("Enter the id of the doctor: ");
-        int id = scanner.nextInt();
+        int did = scanner.nextInt();
 
 
         try {
             ps = DbConnector.getConnection().prepareStatement("SELECT * FROM doctors" +
-                    " WHERE id = " + id);
+                    " WHERE did = " + did);
             rs = ps.executeQuery();
 
-            int doctorId, age;
-            String firstName, lastName, department;
+            int doctorId;
+            String firstName, lastName, department, consultations;
 
             Doctor doctor = new Doctor();
             while (rs.next()) {
-                doctorId = rs.getInt("id");
+                doctorId = rs.getInt("did");
                 firstName = rs.getString("firstname");
                 lastName = rs.getString("lastname");
-                age = rs.getInt("age");
                 department = rs.getString("department");
+                consultations = rs.getString("consultations");
                 doctor.setId(doctorId);
                 doctor.setFirstName(firstName);
                 doctor.setLastName(lastName);
-                doctor.setAge(age);
                 doctor.setDepartment(department);
-                System.out.println(doctorId + "\t " + firstName + "\t " + lastName + "\t " + age + "\t " + department + "\t "
+                doctor.setConsultations(consultations);
+                System.out.println(doctorId + "\t " + firstName + "\t " + lastName + "\t " + department + "\t " + consultations + "\t "
                 );
 
             }
@@ -83,10 +83,10 @@ public class DoctorController {
     public static void deleteDoctor() {
 
         System.out.print("Enter the id of the doctor you want to delete: ");
-        int id = scanner.nextInt();
+        int did = scanner.nextInt();
 
         try {
-            ps = DbConnector.getConnection().prepareStatement("DELETE FROM doctors WHERE id=" + id);
+            ps = DbConnector.getConnection().prepareStatement("DELETE FROM doctors WHERE did=" + did);
             ps.execute();
             System.out.println("Doctor data deleted successfully.");
         } catch (SQLException e) {
@@ -95,18 +95,18 @@ public class DoctorController {
     }
     public static void editDoctor() {
         System.out.println("Enter the doctor's id: ");
-        int id = scanner.nextInt();
+        int doctorId= scanner.nextInt();
 
-        System.out.print("first name, last name, age, department");
+        System.out.print("firstname, lastname, department, consultation times");
+        System.out.println();
         System.out.print("Enter the field you would like to edit: ");
         String field = scanner.next();
 
-        System.out.print("Enter the updated value: ");
+        System.out.print("Enter the updated data: ");
         String update = scanner.next();
 
         try {
-            ps = DbConnector.getConnection().prepareStatement("UPDATE doctors SET" + field + " = " + update +
-                    " WHERE id = " + id);
+            ps = DbConnector.getConnection().prepareStatement("UPDATE doctors SET " + field + " = '" + update + "' WHERE did = " + doctorId);
             ps.executeUpdate();
             System.out.println("Doctor's data updated.");
         } catch (SQLException e) {

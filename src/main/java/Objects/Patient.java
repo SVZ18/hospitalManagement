@@ -5,21 +5,19 @@ public class Patient {
     private String firstName;
     private String lastName;
     private int age;
-    private String sex;
     private String signIn;
     private String signOut;
-    private String drugs;
+    private int drugs;
 
     public Patient() {
 
     }
 
-    public Patient(int id, String firstName, String lastName, int age, String sex, String signIn, String signOut, String drugs) {
+    public Patient(int id, String firstName, String lastName, int age, String signIn, String signOut, int drugs) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-        this.sex = sex;
         this.signIn = signIn;
         this.signOut = signOut;
         this.drugs = drugs;
@@ -55,14 +53,7 @@ public class Patient {
 
     public void setAge(int age) {
         this.age = age;
-    }
 
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
     }
 
     public String getSignIn() {
@@ -81,11 +72,11 @@ public class Patient {
         this.signOut = signOut;
     }
 
-    public String getDrugs() {
+    public int getDrugs() {
         return drugs;
     }
 
-    public void setDrugs(String drugs) {
+    public void setDrugs(int drugs) {
         this.drugs = drugs;
     }
 }

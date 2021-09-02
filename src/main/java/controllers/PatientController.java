@@ -23,9 +23,6 @@ public class PatientController {
         System.out.print("Enter the age of the patient: ");
         int age = scanner.nextInt();
 
-        System.out.print("Enter the sex of the patient: ");
-        String sex = scanner.next();
-
         System.out.println("dd.mm.yyyy");
         System.out.print("Enter the date of sign-in: ");
         String signIn = scanner.next();
@@ -34,14 +31,14 @@ public class PatientController {
         System.out.print("Enter the date of sign-out: ");
         String signOut = scanner.next();
 
-        System.out.print("Enter the drugs prescribed to the patient: ");
-        String drugs = scanner.next();
+        System.out.print("Enter the id of drugs prescribed: ");
+        int drugs = scanner.nextInt();
 
         try {
 
             ps = DbConnector.getConnection().prepareStatement("INSERT INTO patients(firstname, lastname, age, " +
-                    "sex, signin, signout, drugs)" + " VALUES('" + firstName + "', '" + lastName + "', " + age + " , '" + sex + "', '" +
-                    signIn + "', '" + signOut + "', '" + drugs + "')");
+                    "signin, signout, drugs)" + " VALUES('" + firstName + "', '" + lastName + "', " + age + ", '" +
+                    signIn + "', '" + signOut + "', " + drugs + ")");
 
             ps.execute();
             return true;
@@ -56,36 +53,34 @@ public class PatientController {
     public static Patient getPatientById() {
 
         System.out.print("Enter the id of the patient: ");
-        int id = scanner.nextInt();
+        int pid = scanner.nextInt();
 
 
         try {
             ps = DbConnector.getConnection().prepareStatement("SELECT * FROM patients" +
-                    " WHERE id = " + id);
+                    " WHERE pid = " + pid);
             rs = ps.executeQuery();
 
-            int patientId, age;
-            String firstName, lastName, sex, signIn, signOut, drugs;
+            int patientId, age,drugs;
+            String firstName, lastName, signIn, signOut;
 
             Patient patient = new Patient();
             while (rs.next()) {
-                patientId = rs.getInt("id");
+                patientId = rs.getInt("pid");
                 firstName = rs.getString("firstname");
                 lastName = rs.getString("lastname");
                 age = rs.getInt("age");
-                sex = rs.getString("sex");
                 signIn = rs.getString("signin");
                 signOut = rs.getString("signout");
-                drugs = rs.getString("drugs");
+                drugs = rs.getInt("drugs");
                 patient.setId(patientId);
                 patient.setFirstName(firstName);
                 patient.setLastName(lastName);
                 patient.setAge(age);
-                patient.setSex(sex);
                 patient.setSignIn(signIn);
                 patient.setSignOut(signOut);
                 patient.setDrugs(drugs);
-                System.out.println(patientId + "\t " + firstName + "\t " + lastName + "\t " + age + "\t " + sex + "\t " + signIn + "\t " + signOut + "\t " + drugs + "\t "
+                System.out.println(patientId + "\t " + firstName + "\t " + lastName + "\t " + age +  "\t " + signIn + "\t " + signOut + "\t " + drugs + "\t "
                 );
 
             }
@@ -101,10 +96,10 @@ public class PatientController {
     public static void deletePatient() {
 
         System.out.print("Enter the id of the patient you want to delete: ");
-        int id = scanner.nextInt();
+        int pid = scanner.nextInt();
 
         try {
-            ps = DbConnector.getConnection().prepareStatement("DELETE FROM patients WHERE id=" + id);
+            ps = DbConnector.getConnection().prepareStatement("DELETE FROM patients WHERE pid=" + pid);
             ps.execute();
             System.out.println("Patient data deleted successfully.");
         } catch (SQLException e) {
@@ -114,9 +109,10 @@ public class PatientController {
 
     public static void editPatient() {
         System.out.println("Enter the patient's id: ");
-        int id = scanner.nextInt();
+        int patientId = scanner.nextInt();
 
-        System.out.print("first name, last name, age, sex, sign-in date, sign-out date, drugs");
+        System.out.print("firstname, lastname, age, sign-in date, sign-out date, drugs");
+        System.out.println();
         System.out.print("Enter the field you would like to edit: ");
         String field = scanner.next();
 
@@ -124,28 +120,12 @@ public class PatientController {
         String update = scanner.next();
 
         try {
-            ps = DbConnector.getConnection().prepareStatement("UPDATE patients SET" + field + " = " + update +
-                    " WHERE id = " + id);
-            ps.executeUpdate();
-            System.out.println("Patient's data updated.");
+            ps = DbConnector.getConnection().prepareStatement("UPDATE patients SET " + field + " = '" + update + "' WHERE pid = " + patientId);
+            ps.execute();
+            System.out.println("Successfully updated patent.");
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
-
 }
-
-//    public static void addPatientDrugs() {
-//        System.out.println("Enter the patient's id: ");
-//        int id = scanner.nextInt();
-//
-//        System.out.println("Enter the drugs prescribed: ");
-//        String drugs = scanner.next();
-//
-//        try {
-//            ps = DbConnector.getConnection().prepareStatement();
-//
-//            ps.execute();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
 
